@@ -3,6 +3,7 @@
   :url "https://github.com/beamly/beamly-core.logging"
   :license {:name "The MIT License"
             :url "http://opensource.org/licenses/MIT"}
-  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [com.typesafe/config "1.2.1"]]
   :source-paths ["src/clj"]
   :test-paths ["test/clj"])
