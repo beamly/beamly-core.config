@@ -46,3 +46,7 @@
   (let [conf (cfg/load-config (.getFile (clojure.java.io/resource "example.conf")))]
     (is (= "10 seconds" (-> conf :timeout)))
     (is (= [ 34, 56, 67, "10.0.0.1" ] (-> conf :values)))))
+
+(deftest example-config-overrides-reference-config
+  (let [conf (cfg/load-config (.getFile (clojure.java.io/resource "example.conf")))]
+    (is (= 300 (-> conf :value)))))
