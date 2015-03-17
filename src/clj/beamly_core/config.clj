@@ -41,23 +41,23 @@
     :else v))
 
 
-(defn ^:private convert-config-to-map [config]
+(defn- convert-config-to-map [config]
   (java-to-clj (.unwrapped (.root config))))
 
-(defn ^:private get-class-loader []
+(defn- get-class-loader []
   (.getContextClassLoader (Thread/currentThread)))
 
-(defn ^:private get-config-from-file [filename]
+(defn- get-config-from-file [filename]
   (let [file (new File filename)]
     (ConfigFactory/parseFile file)))
 
-(defn ^:private get-default-conf []
+(defn- get-default-conf []
   (ConfigFactory/defaultReference (get-class-loader)))
 
-(defn ^:private get-default-overrides []
+(defn- get-default-overrides []
   (ConfigFactory/defaultOverrides (get-class-loader)))
 
-(defn ^:private get-resolve-options []
+(defn- get-resolve-options []
   (ConfigResolveOptions/defaults))
 
 (defn load-and-resolve-config
