@@ -5,19 +5,24 @@
 
 
 
-(defn strip-quotes [s]
+(defn strip-quotes
+  "strips leading and trailing quotes from a string"
+  [s]
   (if (and (.startsWith s "\"")
            (.endsWith s "\""))
     (.substring s 1 (dec (.length s)))
     s))
 
-(defn strip-leading-zeros [s]
+(defn strip-leading-zeros
+  "strips leading zeros from a string"
+  [s]
   (if (.startsWith s "0")
     (strip-leading-zeros (.substring s 1 (.length s)))
     s))
 
 (defn parse-number
-  "parse a number from a string, handling E notation, strip leading zeros and trailing whitespace"
+  "parse a number from a string, handling E notation, strip leading zeros
+   and trailing whitespace"
   [s]
   (when (re-find #"^-?\d+\.?\d*([Ee]\+\d+|[Ee]-\d+|[Ee]\d+)?$" (.trim s))
     (read-string (strip-leading-zeros s))))
@@ -27,7 +32,8 @@
   [v]
   (cond
     (instance? Map v) (reduce
-                        (fn [acc [k1 v1]] (assoc acc (keyword k1) (java-to-clj v1)))
+                        (fn [acc [k1 v1]]
+                          (assoc acc (keyword k1) (java-to-clj v1)))
                         {}
                         (.entrySet v))
     (instance? List v)  (mapv java-to-clj v)
@@ -35,23 +41,23 @@
     :else v))
 
 
-(defn convert-config-to-map [config]
+(defn ^:private convert-config-to-map [config]
   (java-to-clj (.unwrapped (.root config))))
 
-(defn get-class-loader []
+(defn ^:private get-class-loader []
   (.getContextClassLoader (Thread/currentThread)))
 
-(defn get-config-from-file [filename]
+(defn ^:private get-config-from-file [filename]
   (let [file (new File filename)]
     (ConfigFactory/parseFile file)))
 
-(defn get-default-conf []
+(defn ^:private get-default-conf []
   (ConfigFactory/defaultReference (get-class-loader)))
 
-(defn get-default-overrides []
+(defn ^:private get-default-overrides []
   (ConfigFactory/defaultOverrides (get-class-loader)))
 
-(defn get-resolve-options []
+(defn ^:private get-resolve-options []
   (ConfigResolveOptions/defaults))
 
 (defn load-and-resolve-config
@@ -67,5 +73,6 @@
     (get-resolve-options)))
 
 (defn load-config [filename]
-  "takes the config from the filename, applies the system overrides, fallsbacks to default values and resolves"
+  "takes the config from the filename, applies the system overrides,
+   fallsbacks to default values and resolves"
   (convert-config-to-map (load-and-resolve-config filename)))
