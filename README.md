@@ -14,13 +14,13 @@ This library is to wrap the [Typesafe config library](https://github.com/typesaf
 
 [Leiningen] dependency information:
 
-    [beamly-core/config "0.1.0"]
+    [beamly/beamly-core.config "0.1.0"]
 
 [Maven] dependency information:
 
     <dependency>
-      <groupId>beamly-core</groupId>
-      <artifactId>config</artifactId>
+      <groupId>beamly</groupId>
+      <artifactId>beamly-core.config</artifactId>
       <version>0.1.0</version>
     </dependency>
 
