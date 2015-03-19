@@ -48,8 +48,11 @@
   (.getContextClassLoader (Thread/currentThread)))
 
 (defn- get-config-from-file [filename]
-  (let [file (new File filename)]
-    (ConfigFactory/parseFile file)))
+  (if (nil? filename)
+    (ConfigFactory/load)
+    (let [file (new File filename)]
+      (ConfigFactory/parseFile file))))
+
 
 (defn- get-default-conf []
   (ConfigFactory/defaultReference (get-class-loader)))
@@ -60,10 +63,14 @@
 (defn- get-resolve-options []
   (ConfigResolveOptions/defaults))
 
+(defn- clear-caches []
+  (ConfigFactory/invalidateCaches))
+
 (defn load-and-resolve-config
   "use the typesafe config libs to load and resolve"
   [filename]
 
+  (clear-caches)
   (.resolve
     (.withFallback
       (.withFallback
@@ -74,11 +81,14 @@
 
 (defn load-config [& [config-filename]]
   "takes the config from the filename, if no filename is provided then it
-   falls back to system proproperty 'config' e.g. '-Dconfig=\"filename\"'
+   falls back to system property 'config' e.g. '-Dconfig=\"filename\"'
 
-   on loading config it applies the system overrides, it fallsback to default
+   If there is no 'config' property defined it will fallback to default
+   Typesafe Config behaviour and look for 'config.file' system property.
+
+   On loading config it applies the system overrides, it fallsback to default
    values and resolves. See Typesafe Config library for further details"
   (let [filename (if config-filename config-filename
-                                     (System/getProperty "config" ""))]
+                                     (System/getProperty "config" nil))]
     (convert-config-to-map (load-and-resolve-config filename))))
 

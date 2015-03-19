@@ -51,12 +51,26 @@
   (let [conf (cfg/load-config (.getFile (clojure.java.io/resource "example.conf")))]
     (is (= 300 (-> conf :value)))))
 
+(defn reset-property [name prev]
+  (if (nil? prev)
+    (System/clearProperty name)
+    (System/setProperty name prev)))
+
 (deftest  example-config-via-property-overrides-reference-config
   (let [prev (System/getProperty "config")]
     (System/setProperty "config" (.getFile (clojure.java.io/resource "example.conf")))
-    (let [conf (cfg/load-config)]
-      (System/setProperty "config" (if (nil? prev) "" prev))
-      (is (= 300 (-> conf :value))))))
+    (let [conf (cfg/load-config)
+          value (-> conf :value)]
+      (reset-property "config" prev)
+      (is (= 300 value)))))
+
+(deftest  example-config-via-typesafe-property-overrides-reference-config
+  (let [prev (System/getProperty "config.file")]
+    (System/setProperty "config.file" (.getFile (clojure.java.io/resource "example.conf")))
+    (let [conf (cfg/load-config)
+          value (-> conf :value)]
+      (reset-property "config.file" prev)
+      (is (= 300 value)))))
 
 
 (deftest not-specifying-config-uses-reference-config
