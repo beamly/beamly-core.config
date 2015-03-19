@@ -10,18 +10,18 @@ This library is to wrap the [Typesafe config library](https://github.com/typesaf
 
 * Releases are published to [Clojars]
 
-* Latest stable release is [0.1.0]
+* Latest stable release is [0.1.1]
 
 [Leiningen] dependency information:
 
-    [beamly/beamly-core.config "0.1.0"]
+    [beamly/beamly-core.config "0.1.1"]
 
 [Maven] dependency information:
 
     <dependency>
       <groupId>beamly</groupId>
       <artifactId>beamly-core.config</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1</version>
     </dependency>
 
 [Beamly]: https://beamly.com/
@@ -48,6 +48,8 @@ The config is built up in the following way.
 The default config ("reference.conf") is looked for in the class path, over this the provided configuration is overlayed, and upon that the system properties are overlayed.
 
 In this manner default config may be overwritten, but system properties cannot.
+
+If 'filename' is not supplied it will look for a system property 'config' for the filename, if that is not found it will default to Typesafe Config's default behaviour.
 
 
 ## Copyright and License
