@@ -50,3 +50,15 @@
 (deftest example-config-overrides-reference-config
   (let [conf (cfg/load-config (.getFile (clojure.java.io/resource "example.conf")))]
     (is (= 300 (-> conf :value)))))
+
+(deftest  example-config-via-property-overrides-reference-config
+  (let [prev (System/getProperty "config")]
+    (System/setProperty "config" (.getFile (clojure.java.io/resource "example.conf")))
+    (let [conf (cfg/load-config)]
+      (System/setProperty "config" (if (nil? prev) "" prev))
+      (is (= 300 (-> conf :value))))))
+
+
+(deftest not-specifying-config-uses-reference-config
+  (let [conf (cfg/load-config)]
+    (is (= 301 (-> conf :value)))))

@@ -72,7 +72,13 @@
       (get-default-conf))
     (get-resolve-options)))
 
-(defn load-config [filename]
-  "takes the config from the filename, applies the system overrides,
-   fallsbacks to default values and resolves"
-  (convert-config-to-map (load-and-resolve-config filename)))
+(defn load-config [& [config-filename]]
+  "takes the config from the filename, if no filename is provided then it
+   falls back to system proproperty 'config' e.g. '-Dconfig=\"filename\"'
+
+   on loading config it applies the system overrides, it fallsback to default
+   values and resolves. See Typesafe Config library for further details"
+  (let [filename (if config-filename config-filename
+                                     (System/getProperty "config" ""))]
+    (convert-config-to-map (load-and-resolve-config filename))))
+
