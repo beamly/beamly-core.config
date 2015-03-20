@@ -1,4 +1,4 @@
-(defproject beamly/beamly-core.config "0.1.0"
+(defproject beamly/beamly-core.config "0.1.1"
   :description "Beamly config library, wrapping Typesafe config"
   :url "https://github.com/beamly/beamly-core.config"
   :license {:name "The MIT License"
