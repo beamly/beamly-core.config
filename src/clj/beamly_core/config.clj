@@ -16,7 +16,7 @@
 (defn strip-leading-zeros
   "strips leading zeros from a string"
   [s]
-  (if (.startsWith s "0")
+  (if (and (.startsWith s "0") (not= (.length s) 1))
     (strip-leading-zeros (.substring s 1 (.length s)))
     s))
 
